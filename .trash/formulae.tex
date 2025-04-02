@@ -1,0 +1,293 @@
+\documentclass[fleqn]{article}
+
+%% Created with wxMaxima 24.02.2_DevelopmentSnapshot
+
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{iftex}
+\ifPDFTeX
+  % PDFLaTeX or LaTeX 
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \DeclareUnicodeCharacter{00B5}{\ensuremath{\mu}}
+\else
+  %  XeLaTeX or LuaLaTeX
+  \usepackage{fontspec}
+\fi
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[leqno]{amsmath}
+\usepackage{ifthen}
+\newsavebox{\picturebox}
+\newlength{\pictureboxwidth}
+\newlength{\pictureboxheight}
+\newcommand{\includeimage}[1]{
+    \savebox{\picturebox}{\includegraphics{#1}}
+    \settoheight{\pictureboxheight}{\usebox{\picturebox}}
+    \settowidth{\pictureboxwidth}{\usebox{\picturebox}}
+    \ifthenelse{\lengthtest{\pictureboxwidth > .95\linewidth}}
+    {
+        \includegraphics[width=.95\linewidth,height=.80\textheight,keepaspectratio]{#1}
+    }
+    {
+        \ifthenelse{\lengthtest{\pictureboxheight>.80\textheight}}
+        {
+            \includegraphics[width=.95\linewidth,height=.80\textheight,keepaspectratio]{#1}
+            
+        }
+        {
+            \includegraphics{#1}
+        }
+    }
+}
+\newlength{\thislabelwidth}
+\DeclareMathOperator{\abs}{abs}
+
+\definecolor{labelcolor}{RGB}{100,0,0}
+
+\begin{document}
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i1)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+R23:\ matrix(\\
+\ [1,0,0],\ \\
+\ [0,c23,s23],\ \\
+\ [0,-s23,c23]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{R23} 
+\begin{pmatrix}1 & 0 & 0\\
+0 & \ensuremath{\mathrm{c23}} & \ensuremath{\mathrm{s23}}\\
+0 & \mathop{-}\ensuremath{\mathrm{s23}} & \ensuremath{\mathrm{c23}}\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i6)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+R12:\ matrix(\\
+\ [c12,s12,0],\ \\
+\ [-s12,c12,0],\ \\
+\ [0,0,1]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{R12} 
+\begin{pmatrix}\ensuremath{\mathrm{c12}} & \ensuremath{\mathrm{s12}} & 0\\
+\mathop{-}\ensuremath{\mathrm{s12}} & \ensuremath{\mathrm{c12}} & 0\\
+0 & 0 & 1\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i9)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+R13d:\ matrix(\\
+\ [c13,0,s13*exp(-i*\ensuremath{\delta})],\ \\
+\ [0,1,0],\ \\
+\ [-s13*exp(i*\ensuremath{\delta}),0,c13]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{R13d} 
+\begin{pmatrix}\ensuremath{\mathrm{c13}} & 0 & \ensuremath{\mathrm{s13}} {{\% e}^{-\left( i \delta \right) }}\\
+0 & 1 & 0\\
+\mathop{-}\left( \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\right)  & 0 & \ensuremath{\mathrm{c13}}\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i15)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+U=R23.R13d.R12;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{\% o15} 
+U\mathop{=}\begin{pmatrix}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c13}} & \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{s12}} & \ensuremath{\mathrm{s13}} {{\% e}^{-\left( i \delta \right) }}\\
+\mathop{-}\left( \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\right) \mathop{-}\ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}} & \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}}\mathop{-}\ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }} & \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{s23}}\\
+\ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s23}}\mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }} & \mathop{-}\left( \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\right) \mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s23}} & \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{c23}}\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i21)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+d23\_R23:\ matrix(\\
+\ [0,0,0],\ \\
+\ [0,-s23,c23],\ \\
+\ [0,-c23,-23]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{d23\_ R23} 
+\begin{pmatrix}0 & 0 & 0\\
+0 & \mathop{-}\ensuremath{\mathrm{s23}} & \ensuremath{\mathrm{c23}}\\
+0 & \mathop{-}\ensuremath{\mathrm{c23}} & \mathop{-}23\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i22)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+d12\_R12:\ matrix(\\
+\ [-s12,c12,0],\ \\
+\ [-c12,-s12,0],\ \\
+\ [0,0,0]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{d12\_ R12} 
+\begin{pmatrix}\mathop{-}\ensuremath{\mathrm{s12}} & \ensuremath{\mathrm{c12}} & 0\\
+\mathop{-}\ensuremath{\mathrm{c12}} & \mathop{-}\ensuremath{\mathrm{s12}} & 0\\
+0 & 0 & 0\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i36)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+dd\_R13d:\ matrix(\\
+\ [0,0,-i*s13*exp(-i*\ensuremath{\delta})],\ \\
+\ [0,0,0],\ \\
+\ [-i*s13*exp(i*\ensuremath{\delta}),0,0]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{dd\_ R13d} 
+\begin{pmatrix}0 & 0 & \mathop{-}\left( i\, \ensuremath{\mathrm{s13}} {{\% e}^{-\left( i \delta \right) }}\right) \\
+0 & 0 & 0\\
+\mathop{-}\left( i\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\right)  & 0 & 0\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i37)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+d13\_R13d:\ matrix(\\
+\ [-s13,0,c13*exp(-i*\ensuremath{\delta})],\ \\
+\ [0,0,0],\ \\
+\ [-c13*exp(i*\ensuremath{\delta}),0,-s13]\\
+);
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{d13\_ R13d} 
+\begin{pmatrix}\mathop{-}\ensuremath{\mathrm{s13}} & 0 & \ensuremath{\mathrm{c13}} {{\% e}^{-\left( i \delta \right) }}\\
+0 & 0 & 0\\
+\mathop{-}\left( \ensuremath{\mathrm{c13}} {{\% e}^{i \delta }}\right)  & 0 & \mathop{-}\ensuremath{\mathrm{s13}}\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i31)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+d23\_U:d23\_R23.R13d.R12;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{d23\_ U} 
+\begin{pmatrix}0 & 0 & 0\\
+\ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s23}}\mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }} & \mathop{-}\left( \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\right) \mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s23}} & \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{c23}}\\
+23 \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\mathop{+}\ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}} & 23 \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}} & \mathop{-}\left( 23 \ensuremath{\mathrm{c13}}\right) \end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i38)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+d13\_U:R23.d13\_R13d.R12;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{d13\_ U} 
+\begin{pmatrix}\mathop{-}\left( \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s13}}\right)  & \mathop{-}\left( \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}}\right)  & \ensuremath{\mathrm{c13}} {{\% e}^{-\left( i \delta \right) }}\\
+\mathop{-}\left( \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\right)  & \mathop{-}\left( \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\right)  & \mathop{-}\left( \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}}\right) \\
+\mathop{-}\left( \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{c23}} {{\% e}^{i \delta }}\right)  & \mathop{-}\left( \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}} {{\% e}^{i \delta }}\right)  & \mathop{-}\left( \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s13}}\right) \end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i39)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+d12\_U:R23.R13d.d12\_R12;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{d12\_ U} 
+\begin{pmatrix}\mathop{-}\left( \ensuremath{\mathrm{c13}}\, \ensuremath{\mathrm{s12}}\right)  & \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c13}} & 0\\
+\ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}} & \mathop{-}\left( \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\right) \mathop{-}\ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}} & 0\\
+\ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\mathop{+}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{s23}} & \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s23}}\mathop{-}\ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }} & 0\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%
+%% INPUT:
+\begin{minipage}[t]{4.000000em}\color{red}\bfseries
+(\% i40)	
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+dd\_U:R23.dd\_R13d.R12;
+\end{minipage}
+%%%% OUTPUT:
+\[\displaystyle \tag{dd\_ U} 
+\begin{pmatrix}0 & 0 & \mathop{-}\left( i\, \ensuremath{\mathrm{s13}} {{\% e}^{-\left( i \delta \right) }}\right) \\
+\mathop{-}\left( \ensuremath{\mathrm{c12}} i\, \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\right)  & \mathop{-}\left( i\, \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}}\, \ensuremath{\mathrm{s23}} {{\% e}^{i \delta }}\right)  & 0\\
+\mathop{-}\left( \ensuremath{\mathrm{c12}}\, \ensuremath{\mathrm{c23}} i\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\right)  & \mathop{-}\left( \ensuremath{\mathrm{c23}} i\, \ensuremath{\mathrm{s12}}\, \ensuremath{\mathrm{s13}} {{\% e}^{i \delta }}\right)  & 0\end{pmatrix}\mbox{}
+\]
+%%%%%%%%%%%%%%%%
+\end{document}
