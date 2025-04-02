@@ -1,1 +1,1 @@
-# NuOscDiff
+# CHICOS (Caley-Hamilton and Invariants for OScillations)
