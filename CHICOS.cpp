@@ -148,7 +148,7 @@ public:
         Disc2_Hs = 0.5 * std::pow(TrHs2, 3) - 27.0 * DetHs * DetHs;
 
         double theta = std::acos(std::sqrt(54.0 * DetHs * DetHs / std::pow(TrHs2, 3)));
-        double sin_theta = std::sin(theta/3);
+        double sin_theta = std::sin(theta/3.0);
         double cos_theta = std::sqrt(1-std::pow(sin_theta, 2));
         double scale = std::sqrt(2.0 * TrHs2 / 3.0);
         lambdas[0] = scale * cos_theta;

@@ -119,7 +119,7 @@ axs[1].grid()
 axs[2].plot(
     L,
     [P_matter[(1, 2, i)] for i in range(len(L))],
-    label=rf"$P(\nu_\mu \to \nu_\tau)$",
+    label=r"$P(\nu_\mu \to \nu_\tau)$",
     color="purple",
 )
 axs[2].set_xlabel("Baseline Distance L (km)")

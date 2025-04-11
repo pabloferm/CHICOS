@@ -1,5 +1,4 @@
 import sympy as sp
-from sympy import preview, print_latex
 
 # Define symbols
 E, t = sp.symbols("E t")  # Energy and time

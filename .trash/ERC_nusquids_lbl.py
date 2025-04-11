@@ -4,16 +4,15 @@
 import nuSQuIDS as nsq
 import time
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 import numpy as np
 
-energy_values = np.geomspace(0.01,10.0,100000)
+energy_values = np.geomspace(0.01, 10.0, 100000)
 
 start_exact = time.time()
 
-# Welcome to the $\nu$-SQuIDS demo. In 
+# Welcome to the $\nu$-SQuIDS demo. In
 # this notebook we will demostrate some of the functionalities of the $\nu$-SQuIDS' python bindings. All of the calculations performed here can also be done in the C++ interface. Enjoy :)! Carlos, Jordi & Chris.
 
 # # The Basics: single energy mode
@@ -23,7 +22,7 @@ start_exact = time.time()
 # To start, like in the C++ case, we need to create a $\nu$-SQuIDS object. To begin this demonstration we will create a simple single energy three flavor neutrino oscillation calculator. Thus we just need to specify the number of neutrinos (3) and if we are dealing with neutrinos or antineutrinos.
 
 
-nuSQ = nsq.nuSQUIDS(3,nsq.NeutrinoType.neutrino)
+nuSQ = nsq.nuSQUIDS(3, nsq.NeutrinoType.neutrino)
 
 
 # nuSQuIDS inputs should be given in natural units. In order to make this convenient we have define a units class called *Const*. We can instanciate it as follows
@@ -138,28 +137,28 @@ nuSQ.Set_MixingParametersToDefault()
 
 # As in the C++ implementation we can change the `Body` by means of the `Set_Body` function and in similar way we can change the `Track`. Lets do an atmospheric oscillation example =).
 
-nuSQ = nsq.nuSQUIDS(3,nsq.NeutrinoType.neutrino)
-nuSQ.Set_Body(nsq.ConstantDensity(13.0,0.5))
-nuSQ.Set_Track(nsq.ConstantDensity.Track(295.0*units.km))
+nuSQ = nsq.nuSQUIDS(3, nsq.NeutrinoType.neutrino)
+nuSQ.Set_Body(nsq.ConstantDensity(13.0, 0.5))
+nuSQ.Set_Track(nsq.ConstantDensity.Track(295.0 * units.km))
 nuSQ.Set_rel_error(1.0e-17)
 nuSQ.Set_abs_error(1.0e-17)
 
 nuSQ.Set_MixingParametersToDefault()
-nuSQ.Set_SquareMassDifference(2,2.5e-3)
-nuSQ.Set_MixingAngle(1,2,0.6)
-nuSQ.Set_CPPhase(0,2,0.0)
+nuSQ.Set_SquareMassDifference(2, 2.5e-3)
+nuSQ.Set_MixingAngle(1, 2, 0.6)
+nuSQ.Set_CPPhase(0, 2, 0.0)
 
 nu_mu_to_nu_e = []
 for Enu in energy_values:
-    nuSQ.Set_E(Enu*units.GeV)
-    nuSQ.Set_initial_state(np.array([0.,1.,0.]),nsq.Basis.flavor)
+    nuSQ.Set_E(Enu * units.GeV)
+    nuSQ.Set_initial_state(np.array([0.0, 1.0, 0.0]), nsq.Basis.flavor)
     nuSQ.EvolveState()
     nu_mu_to_nu_e.append(nuSQ.EvalFlavor(0))
 end_exact = time.time()
 time_exact = end_exact - start_exact
 print(f"{time_exact}")
-plt.plot(energy_values,nu_mu_to_nu_e, lw = 2, color = 'blue',label = r"$\nu_\mu$")
-plt.legend(fancybox = True, fontsize = 13, loc='upper center', bbox_to_anchor=(0.5, 0.75))
+plt.plot(energy_values, nu_mu_to_nu_e, lw=2, color="blue", label=r"$\nu_\mu$")
+plt.legend(fancybox=True, fontsize=13, loc="upper center", bbox_to_anchor=(0.5, 0.75))
 plt.xscale("log")
-#fig.tight_layout()
+# fig.tight_layout()
 plt.show()
