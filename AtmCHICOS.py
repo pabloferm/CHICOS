@@ -14,7 +14,7 @@ class AtmCHICOS(CHICOS):
         segs, rhos = self.earth.path(cos_zentih)
         S = np.diag([1.0, 1.0, 1.0])
         for s, r in zip(segs, rhos):
-            self.set_density(r)
+            self.set_density(r, 1)
             S = np.matmul(S, self._amplitude(E, s)) / np.sqrt(self.Disc2_Hs)
         return S
 

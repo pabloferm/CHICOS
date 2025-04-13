@@ -210,6 +210,3 @@ class gCHICOS:
                 [-s12 * c23 - c12 * s23 * s13 * e_idelta, c12 * c23 - s12 * s23 * s13 * e_idelta, s23 * c13,],
                 [s12 * s23 - c12 * c23 * s13 * e_idelta, -c12 * s23 - s12 * c23 * s13 * e_idelta, c23 * c13,],
             ])
-
-    def media_profile(self):
-        pass

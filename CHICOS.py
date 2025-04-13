@@ -35,9 +35,7 @@ class CHICOS:
         self._set_matrices()
 
     def oscillator(self, E_array, L_array):
-        return np.array(
-            [self.compute_oscillations(E, L) for (E, L) in zip(E_array, L_array)]
-        )
+        return np.array([self.compute_oscillations(E, L) for (E, L) in zip(E_array, L_array)])
 
     def compute_oscillations(
         self, E, L, alpha=None, beta=None

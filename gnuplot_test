@@ -1,0 +1,13 @@
+cat << 'EOF' | gnuplot
+set terminal pngcairo enhanced size 1200,800
+set output 'oscillations.png'
+set title 'Neutrino Oscillation Probabilities vs Energy (L = 295 km)'
+set xlabel 'Energy (GeV)'
+set ylabel 'Probability'
+set logscale x
+set grid
+set key left
+plot 'test_cpp.dat' using 1:2 title 'P(e->e)' with lines lw 2, \
+     'test_cpp.dat' using 1:3 title 'P(μ->e)' with lines lw 2, \
+     'test_cpp.dat' using 1:4 title 'P(τ->e)' with lines lw 2
+EOF

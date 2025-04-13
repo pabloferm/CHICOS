@@ -159,25 +159,37 @@ public:
 
 
 int main() {
-    const double L = 295.0;  // km
-    const int numPoints = 1000000;
-    const double minEnergy = 0.01;  // GeV
-    const double maxEnergy = 1000.0;  // GeV
+    const double minL = 0.0;  // km
+    const double maxL = 10000.0;  // km
+    const int numPoints = 1000;
+    const double minEnergy = 0.001;  // GeV
+    const double maxEnergy = 10000.0;  // GeV
     
     CHICOS chicos;
-    std::cout << "E(GeV)\tP(e->e)\tP(mu->e)\tP(tau->e)\n";
+    std::cout << "E(GeV),L(km),P(e->e),P(mu->e),P(tau->e),P(e->mu),P(mu->mu),P(tau->mu),P(e->tau),P(mu->tau),P(tau->tau)\n";
     
     // Process energies on the fly without storing them
     for (int i = 0; i < numPoints; i++) {
+    for (int j = 0; j < numPoints; j++) {
         double t = static_cast<double>(i) / (numPoints - 1);  // ranges from 0 to 1
+        double s = static_cast<double>(j) / (numPoints - 1);  // ranges from 0 to 1
         double energy = minEnergy * std::pow(maxEnergy/minEnergy, t);  // logarithmic spacing
-        Matrix3cd prob = chicos.compute_oscillations(energy, L);
-/*                std::cout << std::scientific << std::setprecision(6)
-                 << energy << "\t"
-                 << std::real(prob(0,0)) << "\t"
-                 << std::real(prob(0,1)) << "\t"
-                 << std::real(prob(0,2)) << "\n";
-*/
+        double baseline = minL * std::pow(maxL/minL, s);  // logarithmic spacing
+        Matrix3cd prob = chicos.compute_oscillations(energy, baseline);
+                std::cout << std::scientific << std::setprecision(10)
+                 << energy << ","
+                 << baseline << ","
+                 << std::real(prob(0,0)) << ","
+                 << std::real(prob(0,1)) << ","
+                 << std::real(prob(0,2)) << ","
+                 << std::real(prob(1,0)) << ","
+                 << std::real(prob(1,1)) << ","
+                 << std::real(prob(1,2)) << ","
+                 << std::real(prob(2,0)) << ","
+                 << std::real(prob(2,1)) << ","
+                 << std::real(prob(2,2)) << "\n";
+
+    }
     }
     return 0;
 }

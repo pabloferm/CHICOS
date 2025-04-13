@@ -1,4 +1,5 @@
 from gCHICOS import gCHICOS as gch
+import time
 
 chic = gch()
 
@@ -24,11 +25,18 @@ chic.setup_physics(
 # compute oscillation probability matrix for fixed E, L and electron density
 L = 295  # km
 print("Osc. Prob. Matrix")
-print(chic.compute_oscillations(E, L, rho * Y_e))
-
+start = time.time()
+p = chic.compute_oscillations(E, L, rho * Y_e)
+end = time.time()
+print(p)
+print(f"It took {end-start} s")
 
 print("=======================================")
 from CHICOS import CHICOS as ch
 chic2 = ch()
 print("Osc. Prob. Matrix")
-print(chic2.oscillator([E], [L]))
+start = time.time()
+p = chic2.oscillator([E], [L])
+end = time.time()
+print(p)
+print(f"It took {end-start} s")

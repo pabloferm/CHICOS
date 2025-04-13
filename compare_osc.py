@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.linalg import expm
 import time
 from AtmCHICOS import AtmCHICOS as ach
+from CHICOS import CHICOS as ch
 
 
 # Constants (example values, modify as needed)
@@ -17,7 +18,7 @@ cos_theta_23, sin_theta_23 = np.cos(theta_23), np.sin(theta_23)
 cos_theta_13, sin_theta_13 = np.cos(theta_13), np.sin(theta_13)
 L = 295  # Fixed baseline in km
 E_vals = np.geomspace(
-    0.01, 100, 10000
+    0.05, 2, 10000
 )  # Energy in GeV (avoid zero to prevent division issues)
 G_F = 1.1663787e-5  # Fermi constant in eV⁻²
 Y_e = 0.5  # Electron fraction
@@ -64,11 +65,11 @@ def approx_oscillation_probabilities(E):
     baselines = np.zeros_like(E_vals) + 295  # km
     zeniths = np.linspace(-1, 1, 50)
     zeniths = np.zeros_like(E_vals) + -0.9
-    # chic = ch()
+    chic = ch()
     # chic = npch()
-    chic = ach()
-    # return chic.oscillator(E_vals, baselines)
-    return chic.oscillator(E_vals, zeniths)
+    # chic = ach()
+    return chic.oscillator(E_vals, baselines)
+    # return chic.oscillator(E_vals, zeniths)
 
 
 # Measure time for exact method
@@ -103,7 +104,7 @@ for i in range(3):
         ax.set_xlabel("Energy (GeV)")
         ax.set_ylabel(f"ΔP({flavors[i]} -> {flavors[j]})")
         # ax.set_yscale("log")
-        ax.set_xscale("log")
+        # ax.set_xscale("log")
         ax.axhline(0, color="k", linestyle="--", linewidth=0.8)
         ax.legend()
 plt.tight_layout()
