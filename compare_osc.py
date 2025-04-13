@@ -51,8 +51,8 @@ def exact_oscillation_probabilities(E):
 def approx_oscillation_probabilities(E):
     """Placeholder for approximate method"""
     baselines = np.zeros_like(E_vals) + 295  # km
-    #chic = ch()
-    chic = npch()
+    chic = ch()
+    #chic = npch()
     return chic.oscillator(E_vals, baselines)
 
 

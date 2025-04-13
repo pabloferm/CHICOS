@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-energy_values = np.geomspace(0.01,10.0,100000)
+energy_values = np.geomspace(0.01,10.0,10000)
 
 start_exact = time.time()
 
