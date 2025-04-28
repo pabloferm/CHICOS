@@ -39,7 +39,7 @@ public:
     void set_density(double density, double Y_e) {
         // Fermi constant G_F = 1.1663787e-5 (eV^-2) not used explicitly here.
         // The matter potential V is given by: 7.56e-14 * Y_e * density (in eV).
-        V = 7.56e-14 * Y_e * density;
+        V = 7.63247e-14 * Y_e * density;
     }
     
     // Update matrices (calls _set_matrices)
@@ -107,8 +107,8 @@ private:
         _set_invariants(E);
         shift_hamiltonian(E);
         shift_hamiltonian_squared(E);
-        // L is rescaled by a factor 1.267
-        double L_factor = L * 1.267;
+        // L is rescaled by a factor 5.067730716156394
+        double L_factor = L * 5.067730716156394;
         Matrix3cd result = Matrix3cd::Zero();
         
         for (int i = 0; i < 3; i++) {

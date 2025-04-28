@@ -15,7 +15,7 @@ class CHICOS:
         # Matter effects
         G_F = 1.1663787e-5  # Fermi constant in eV⁻²
         Y_e = 0.5  # Electron fraction
-        self.V = 7.56e-14 * Y_e * density # Convert to eV
+        self.V = 7.63247e-14 * Y_e * density # Convert to eV
 
         self.theta_12 = np.radians(theta_12)
         self.theta_23 = np.radians(theta_23)
@@ -38,7 +38,7 @@ class CHICOS:
         self._set_invariants(E)
         self.shift_hamiltonian(E)
         self.shift_hamiltonian_squared(E)
-        L *= 1.267
+        L *= 5.067730716156394
         result = 0
         for i in range(3):
             diff_exp = (self.lambdas[i - 1] - self.lambdas[i - 2]) * np.exp(-1j * L * self.lambdas[i])
