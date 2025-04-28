@@ -4,12 +4,13 @@
 #include <complex>
 #include <cmath>
 #include <iostream>
+#include "gCHICOS.h"
 
 using namespace Eigen;
 using namespace std;
 
 // Global constants
-const double GF_factor = 7.56e-14;
+const double GF_factor = 7.63247e-14;
 const double SQRT3 = std::sqrt(3.0);
 
 // Class definition

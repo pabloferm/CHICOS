@@ -16,9 +16,9 @@ delta_cp = np.radians(234)
 cos_theta_12, sin_theta_12 = np.cos(theta_12), np.sin(theta_12)
 cos_theta_23, sin_theta_23 = np.cos(theta_23), np.sin(theta_23)
 cos_theta_13, sin_theta_13 = np.cos(theta_13), np.sin(theta_13)
-L = 295  # Fixed baseline in km
+L = 300  # Fixed baseline in km
 E_vals = np.geomspace(
-    0.05, 2, 10000
+    0.05, 5, 1000
 )  # Energy in GeV (avoid zero to prevent division issues)
 G_F = 1.1663787e-5  # Fermi constant in eV⁻²
 Y_e = 0.5  # Electron fraction
@@ -56,13 +56,13 @@ def exact_oscillation_probabilities(E):
     H_vac = M2 / (2 * E)
     H_mat = np.diag([V, 0, 0])
     H_full = U @ H_vac @ np.conj(U).T + H_mat
-    U_t = expm(-1j * H_full * L * 1.267)  # 1.267 = conversion factor for km/eV^2
+    U_t = expm(-1j * H_full * L * 5.07)  # 1.267 = conversion factor for km/eV^2
     return np.abs(U_t) ** 2  # Probability matrix
 
 
 def approx_oscillation_probabilities(E):
     """Placeholder for approximate method"""
-    baselines = np.zeros_like(E_vals) + 295  # km
+    baselines = np.zeros_like(E_vals) + 300  # km
     zeniths = np.linspace(-1, 1, 50)
     zeniths = np.zeros_like(E_vals) + -0.9
     chic = ch()
@@ -74,7 +74,7 @@ def approx_oscillation_probabilities(E):
 
 # Measure time for exact method
 # start_exact = time.time()
-# P_exact = np.array([exact_oscillation_probabilities(E) for E in E_vals])
+P_exact = np.array([exact_oscillation_probabilities(E) for E in E_vals])
 # end_exact = time.time()
 # time_exact = end_exact - start_exact
 
@@ -83,6 +83,11 @@ start_approx = time.time()
 P_approx = approx_oscillation_probabilities(E_vals)
 end_approx = time.time()
 time_approx = end_approx - start_approx
+
+print("energy mue mumu mutau")
+for k, E in enumerate(E_vals):
+    print(f"{E} {P_approx[k, 0, 1]} {P_approx[k, 1, 1]} {P_approx[k, 2, 1]}")
+    #print(f"{E} {P_approx[k, 1, 0]} {P_approx[k, 1, 1]} {P_approx[k, 1, 2]}")
 
 # Compute differences
 # P_diff = np.abs(P_exact - P_approx)
@@ -98,7 +103,7 @@ fig, axes = plt.subplots(3, 3, figsize=(12, 10))
 for i in range(3):
     for j in range(3):
         ax = axes[i, j]
-        # ax.plot(E_vals, P_exact[:, i, j], label="Exact", linestyle="-")
+        ax.plot(E_vals, P_exact[:, i, j], label="Exact", linestyle="-")
         ax.plot(E_vals, P_approx[:, i, j], label="CHICOS", linestyle="-")
         # ax.plot(E_vals, P_diff[:, i, j], label="CHICOS-pade", linestyle="-")
         ax.set_xlabel("Energy (GeV)")

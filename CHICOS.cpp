@@ -33,7 +33,7 @@ public:
           vum2u(Matrix3cd::Zero()), 
           m2(Matrix3cd::Zero()),
           lambdas(Vector3cd::Zero()),
-          V(7.56e-14 * 0.5 * density),
+          V(7.63247e-14 * 0.5 * density),
           theta_12(M_PI * theta_12 / 180.0),
           theta_23(M_PI * theta_23 / 180.0),
           theta_13(M_PI * theta_13 / 180.0),
@@ -56,7 +56,7 @@ public:
 
     // Calculate amplitude for oscillations
     Matrix3cd _amplitude(const double E, double L) const {
-        L *= 1.267;
+        L *= 5.0677307;
         Matrix3cd result = Matrix3cd::Zero();
         for (int i = 0; i < 3; ++i) {
             int j = (i + 2) % 3;  // i-1 wrapped

@@ -29,7 +29,7 @@ class CHICOS:
 
     def set_density(self, density, Y_e):
         G_F = 1.1663787e-5  # Fermi constant in eV⁻²
-        self.V = 7.56e-14 * Y_e * density  # Convert to eV
+        self.V = 7.63247e-14 * Y_e * density  # Convert to eV
 
     def update(self):
         self._set_matrices()
@@ -48,7 +48,7 @@ class CHICOS:
         self._set_invariants(E)
         self.shift_hamiltonian(E)
         self.shift_hamiltonian_squared(E)
-        L *= 1.267
+        L *= 5.0677307
         result = 0
         for i in range(3):
             diff_exp = (self.lambdas[i - 1] - self.lambdas[i - 2]) * np.exp(
