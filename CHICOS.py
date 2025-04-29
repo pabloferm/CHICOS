@@ -9,7 +9,7 @@ class CHICOS:
         theta_13=8.57,
         delta_cp=234,
         dm2_21=7.42e-5,
-        dm2_31=2.514e-3,
+        dm2_31=2.51e-3,
         density=2.8,  # g/cm³
     ):
         # Matter effects

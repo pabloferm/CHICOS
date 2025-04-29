@@ -16,11 +16,11 @@ delta_cp=np.radians(234)
 cos_theta_12, sin_theta_12 = np.cos(theta_12), np.sin(theta_12)
 cos_theta_23, sin_theta_23 = np.cos(theta_23), np.sin(theta_23)
 cos_theta_13, sin_theta_13 = np.cos(theta_13), np.sin(theta_13)
-L = 295  # Fixed baseline in km
-E_vals = np.geomspace(0.01, 10, 10000) # Energy in GeV (avoid zero to prevent division issues)
+L = 300  # Fixed baseline in km
+E_vals = np.geomspace(0.05, 5, 1000) # Energy in GeV (avoid zero to prevent division issues)
 G_F = 1.1663787e-5  # Fermi constant in eV⁻²
 Y_e = 0.5  # Electron fraction
-V = 7.56e-14 * Y_e * 2.8
+V = 7.63247e-14 * Y_e * 2.8
 
 # Neutrino mixing matrix (PMNS)
 U = np.array(
@@ -45,12 +45,12 @@ def exact_oscillation_probabilities(E):
     H_vac = M2 / (2 * E)
     H_mat = np.diag([V, 0, 0])
     H_full = U @ H_vac @ np.conj(U).T + H_mat
-    U_t = expm(-1j * H_full * L * 1.267)  # 1.267 = conversion factor for km/eV^2
+    U_t = expm(-1j * H_full * L * 5.067730716156394)  # 5.067730716156394 = conversion factor for km/eV^2
     return np.abs(U_t) ** 2  # Probability matrix
 
 def approx_oscillation_probabilities(E):
     """Placeholder for approximate method"""
-    baselines = np.zeros_like(E_vals) + 295  # km
+    baselines = np.zeros_like(E_vals) + 300  # km
     chic = ch()
     #chic = npch()
     return chic.oscillator(E_vals, baselines)
