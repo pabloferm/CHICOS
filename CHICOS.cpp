@@ -39,7 +39,7 @@ public:
     void set_density(double density, double Y_e) {
         // Fermi constant G_F = 1.1663787e-5 (eV^-2) not used explicitly here.
         // The matter potential V is given by: 7.56e-14 * Y_e * density (in eV).
-        V = 7.63247e-14 * Y_e * density;
+        V = 7.63247e-5 * Y_e * density;
     }
     
     // Update matrices (calls _set_matrices)
@@ -165,7 +165,7 @@ private:
         TrH = (dm2_21 + dm2_31) / (2.0 * E) + V;
         TrH2 = ( (dm2_21 * dm2_21 + dm2_31 * dm2_31) / (4.0 * E * E) )
                 + V * V
-                + V * ((norm(U(0, 1)) * dm2_21) + (norm(U(1, 2)) * dm2_31)) / E;
+                + V * ((norm(U(0, 1)) * dm2_21) + (norm(U(1, 2)) * dm2_31)) / (2.0 * E); // CHECK!!!
         DetH = V * dm2_21 * dm2_31 *
                norm(U(1, 1) * U(2, 2) - U(1, 2) * U(2, 1)) / ( (2.0 * E) * (2.0 * E) );
         
