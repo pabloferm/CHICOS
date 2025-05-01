@@ -8,7 +8,7 @@ from CHICOS_numpy import npCHICOS as npch
 
 # Constants (example values, modify as needed)
 Delta_m2_21 = 7.42e-5  # eV^2
-Delta_m2_31 = 2.514e-3  # eV^2
+Delta_m2_31 = 2.51e-3  # eV^2
 theta_12=np.radians(33.44)
 theta_23=np.radians(49.2)
 theta_13=np.radians(8.57)
@@ -20,7 +20,7 @@ L = 300  # Fixed baseline in km
 E_vals = np.geomspace(0.05, 5, 1000) # Energy in GeV (avoid zero to prevent division issues)
 G_F = 1.1663787e-5  # Fermi constant in eV⁻²
 Y_e = 0.5  # Electron fraction
-V = 7.63247e-14 * Y_e * 2.8
+V = 7.63247e-5 * Y_e * 2.8
 
 # Neutrino mixing matrix (PMNS)
 U = np.array(
@@ -51,8 +51,8 @@ def exact_oscillation_probabilities(E):
 def approx_oscillation_probabilities(E):
     """Placeholder for approximate method"""
     baselines = np.zeros_like(E_vals) + 300  # km
-    chic = ch()
-    #chic = npch()
+    # chic = ch()
+    chic = npch()
     return chic.oscillator(E_vals, baselines)
 
 
@@ -70,6 +70,10 @@ time_approx = end_approx - start_approx
 
 # Compute differences
 P_diff = np.abs(P_exact - P_approx)
+
+print("energy mue mumu mutau")
+for k, E in enumerate(E_vals):
+    print(f"{E} {P_approx[k, 0, 1]} {P_approx[k, 1, 1]} {P_approx[k, 2, 1]}")
 
 # Print computation times
 print(f"Exact method computation time: {time_exact:.4f} seconds")

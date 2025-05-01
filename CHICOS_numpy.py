@@ -82,7 +82,7 @@ class npCHICOS:
         # Matter effects
         G_F = 1.1663787e-5  # Fermi constant in eV⁻²
         Y_e = 0.5  # Electron fraction
-        self.V = 7.63247e-14 * Y_e * density  # Convert to eV
+        self.V = 7.63247e-5 * Y_e * density  # Convert to eV
 
         self.theta_12 = np.radians(theta_12)
         self.theta_23 = np.radians(theta_23)
