@@ -23,7 +23,8 @@ public:
            double dm2_21 = 7.42e-5,
            double dm2_31 = 2.51e-3,
            double density = 2.8,   // g/cm^3
-           double Y_e = 0.5)       // unitless (effective electron fraction)
+           double Y_e = 0.5,    // unitless (effective electron fraction)
+           int neutrino = 0)
     {
         // Oscillation parameters
         theta_12 = theta_12_deg * PI / 180.0;
@@ -34,7 +35,7 @@ public:
         this->dm2_31 = dm2_31;
         
         // Matter effects
-        V = WEAK * Y_e * density;
+        V = std::pow(-1, neutrino) * WEAK * Y_e * density;
         
         // Initiate math
         need_update = true;
@@ -65,7 +66,7 @@ public:
         Matrix3d prob = Matrix3d::Zero();
         for (int i = 0; i < J.rows(); i++) {
             for (int j = 0; j < J.cols(); j++) {
-                prob(i, j) = std::real(J(i, j) * std::conj(J(i, j))); // squared modulus
+                prob(i, j) = std::norm(J(i, j));
             }
         }
         return prob / Disc2_Hs;
@@ -104,8 +105,8 @@ private:
     
     // Private method: computes amplitude matrix.
     Matrix3cd _amplitude(double E, double L) {
-        _set_invariants(E);
-        _set_hamiltonians(E);
+        //_set_invariants(E);
+        _set_invariants_hamiltonians(E);
         double L_factor = L * BASELINE_FACTOR;
         Matrix3cd result = Matrix3cd::Zero();
 
@@ -121,31 +122,26 @@ private:
         return result;
     }
     
-    void _set_hamiltonians(double E) {
+    void _set_invariants_hamiltonians(double E) {
         if (need_update) _set_matrices();
 
         // H = (um2u)/(2E) + v
         H = um2u / (2.0 * E) + v;        
         // H^2 = um4u/(4E^2) + v2 + (um2uv + vum2u)/(2E)
         H2 = um4u / (4.0 * E * E) + v2 + (um2uv + vum2u) / (2.0 * E);
+        // Trace of Hamiltonian
+        TrH = std::real(H(0,0) + H(1,1) + H(2,2));
+        // Trace of Hamiltonian squared
+        TrH2 = std::real(H2(0,0) + H2(1,1) + H2(2,2));
+        // Determinant of Hamiltonian
+        DetH = V * dm2_21 * dm2_31 * std::pow(std::abs(U(1, 1) * U(2, 2) - U(1, 2) * U(2, 1)), 2) / std::pow((2.0 * E), 2);
 
         // Shift the Hamiltonian: Hs = H - (TrH/3) I.
         Hs = H - (TrH / 3.0) * Matrix3cd::Identity();
         // Shift the squared Hamiltonian.
         Hs2 = H2 - (2 * TrH * H / 3.0) + (TrH * TrH / 9.0) * Matrix3cd::Identity();
-    }
-        
-    // Set invariants based on energy E.
-    void _set_invariants(double E) {
-        // Trace of Hamiltonian
-        TrH = (dm2_21 + dm2_31) / (2.0 * E) + V;
-        // Trace of Hamiltonian squared
-        TrH2 = std::real(( (dm2_21 * dm2_21 + dm2_31 * dm2_31) / (4.0 * E * E) ) + V * V + V * um2u(0,0) / E);
-        // Determinant of Hamiltonian
-        DetH = V * dm2_21 * dm2_31 * std::pow(std::abs(U(1, 1) * U(2, 2) - U(1, 2) * U(2, 1)), 2) / std::pow((2.0 * E), 2);
-        
         // Trace of shifted Hamiltonian squared
-        TrHs2 = TrH2 - (TrH * TrH) / 3.0;
+        TrHs2 = std::real(Hs2(0,0) + Hs2(1,1) + Hs2(2,2));
         // Determinant of shifted Hamiltonian
         DetHs = DetH + (TrH2 * TrH) / 6.0 - (5.0 / 54.0) * std::pow(TrH, 3);
         // Disciminant of (shifted) Hamiltonian
@@ -154,7 +150,6 @@ private:
         // Eigenvalues of shifted Hamiltonian
         // _theta = arccos(sqrt(54 * DetHs^2 / TrHs2^3))
         double ratio = std::sqrt(54.0 * DetHs * DetHs / std::pow(TrHs2, 3));
-
         double theta = std::acos(ratio);
         double sin_theta = std::sin(theta/3.0);
         double cos_theta = std::sqrt(1-std::pow(sin_theta, 2));
@@ -163,7 +158,7 @@ private:
         lambdas[1] = 0.5 * scale * (-cos_theta - SQRT_3*sin_theta);
         lambdas[2] = - lambdas[0] - lambdas[1];
     }
-    
+
     // Set various matrices needed for oscillation calculations.
     void _set_matrices() {
         pmns_matrix();
@@ -202,9 +197,8 @@ private:
         double c23 = std::sqrt(1-std::pow(s23, 2));
         double s13 = std::sin(theta_13);
         double c13 = std::sqrt(1-std::pow(s13, 2));
-        // e^{-i delta_cp} since in Python we use np.conj(e^(i delta_cp)) in the (0,2) element.
-        complex<double> e_idelta = std::exp(complex<double>(0, delta_cp));
-        complex<double> e_midelta = std::exp(complex<double>(0, -delta_cp));
+        complex<double> e_idelta = std::exp(complex<double>(0, std::pow(-1, neutrino) * delta_cp));
+        complex<double> e_midelta = std::exp(complex<double>(0, - std::pow(-1, neutrino) * delta_cp));
         
         // Allocate U as a 3x3 complex matrix.
         U = Matrix3cd::Zero();
