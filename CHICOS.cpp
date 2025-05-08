@@ -23,8 +23,8 @@ public:
            double dm2_21 = 7.42e-5,
            double dm2_31 = 2.51e-3,
            double density = 2.8,   // g/cm^3
-           double Y_e = 0.5,    // unitless (effective electron fraction)
-           int neutrino = 0)
+           double Y_e = 0.5    // unitless (effective electron fraction)
+           )
     {
         // Oscillation parameters
         theta_12 = theta_12_deg * PI / 180.0;
@@ -35,7 +35,7 @@ public:
         this->dm2_31 = dm2_31;
         
         // Matter effects
-        V = std::pow(-1, neutrino) * WEAK * Y_e * density;
+        V = WEAK * Y_e * density;
         
         // Initiate math
         need_update = true;
@@ -197,8 +197,8 @@ private:
         double c23 = std::sqrt(1-std::pow(s23, 2));
         double s13 = std::sin(theta_13);
         double c13 = std::sqrt(1-std::pow(s13, 2));
-        complex<double> e_idelta = std::exp(complex<double>(0, std::pow(-1, neutrino) * delta_cp));
-        complex<double> e_midelta = std::exp(complex<double>(0, - std::pow(-1, neutrino) * delta_cp));
+        complex<double> e_idelta = std::exp(complex<double>(0, delta_cp));
+        complex<double> e_midelta = std::exp(complex<double>(0, - delta_cp));
         
         // Allocate U as a 3x3 complex matrix.
         U = Matrix3cd::Zero();
@@ -239,33 +239,33 @@ int main() {
     
     // Process energies on the fly without storing them
     for (int i = 0; i < numPoints; i++) {
-    for (int j = 0; j < numPoints; j++) {
+    //for (int j = 0; j < numPoints; j++) {
         double t = static_cast<double>(i) / (numPoints - 1);  // ranges from 0 to 1
-        double s = static_cast<double>(j) / (numPoints - 1);  // ranges from 0 to 1
+        //double s = static_cast<double>(j) / (numPoints - 1);  // ranges from 0 to 1
         double energy = minEnergy * std::pow(maxEnergy/minEnergy, t);  // logarithmic spacing
-        double baseline = minL * std::pow(maxL/minL, s);  // logarithmic spacing
-        //double baseline = 300.0;  // logarithmic spacing
+        //double baseline = minL * std::pow(maxL/minL, s);  // logarithmic spacing
+        double baseline = 300.0;  // logarithmic spacing
         auto start = high_resolution_clock::now();
         Matrix3cd prob = chicos.compute_oscillations(energy, baseline);
         auto end = high_resolution_clock::now();
         total_duration_ns += duration_cast<nanoseconds>(end - start).count();
         ++count;
-        /*
+        
                 std::cout << std::scientific << std::setprecision(7)
                  << energy << ","
                  << baseline << ","
-                 << std::real(prob(0,0)) << ","
+                // << std::real(prob(0,0)) << ","
                  << std::real(prob(0,1)) << ","
-                 << std::real(prob(0,2)) << ","
-                 << std::real(prob(1,0)) << ","
+                // << std::real(prob(0,2)) << ","
+                // << std::real(prob(1,0)) << ","
                  << std::real(prob(1,1)) << ","
-                 << std::real(prob(1,2)) << ","
-                 << std::real(prob(2,0)) << ","
-                 << std::real(prob(2,1)) << ","
-                 << std::real(prob(2,2)) << "\n";
-        */
+                // << std::real(prob(1,2)) << ","
+                // << std::real(prob(2,0)) << ","
+                 << std::real(prob(2,1)) << "\n";
+                // << std::real(prob(2,2)) << "\n";
+        
 
-    }
+    //}
     }
     double avg_ns = static_cast<double>(total_duration_ns) / count / 9.0;
     std::cout << "Total calls: " << count << "\n";
