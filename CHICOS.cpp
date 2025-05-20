@@ -83,6 +83,7 @@ private:
     
     // Eigenvalues (lambdas)
     Vector3d lambdas;
+    Vector3cd exp_lambdas;
     
     // Pre-computed matrices (all 3x3 matrices)
     Matrix3cd U;           // PMNS matrix
@@ -108,15 +109,22 @@ private:
         //_set_invariants(E);
         _set_invariants_hamiltonians(E);
         double L_factor = L * BASELINE_FACTOR;
+
         Matrix3cd result = Matrix3cd::Zero();
+        Matrix3cd term;
+        complex<double> diff_exp, exp_lambda;
+
+        exp_lambdas[0] = exp(complex<double>(0, -L_factor * lambdas[0]));
+        exp_lambdas[1] = exp(complex<double>(0, -L_factor * lambdas[1]));
+        exp_lambdas[2] = 1.0 / (exp_lambdas[0] * exp_lambdas[1]);
 
         for (int i = 0; i < 3; i++) {
             int k = (i + 2) % 3;
             int j = (i + 1) % 3;
             // diff_exp = (lambda[idx1] - lambda[idx2]) * exp(-1j * L_factor * lambda[i])
-            complex<double> diff_exp = (lambdas[k] - lambdas[j]) * exp(complex<double>(0, -L_factor * lambdas[i]));            
+            diff_exp = (lambdas[k] - lambdas[j]) * exp_lambdas[i];
             // Matrix combination: l_j*l_k * I + l_i * Hs + Hs2
-            Matrix3cd term = lambdas[j] * lambdas[k] * Matrix3cd::Identity() + lambdas[i] * Hs + Hs2;
+            term = lambdas[j] * lambdas[k] * Matrix3cd::Identity() + lambdas[i] * Hs + Hs2;
             result += diff_exp * term;
         }
         return result;
@@ -198,7 +206,7 @@ private:
         double s13 = std::sin(theta_13);
         double c13 = std::sqrt(1-std::pow(s13, 2));
         complex<double> e_idelta = std::exp(complex<double>(0, delta_cp));
-        complex<double> e_midelta = std::exp(complex<double>(0, - delta_cp));
+        complex<double> e_midelta = 1.0 / e_idelta;
         
         // Allocate U as a 3x3 complex matrix.
         U = Matrix3cd::Zero();
@@ -230,7 +238,7 @@ int main() {
 
     const double minL = 10.0;  // km
     const double maxL = 10000.0;  // km
-    const int numPoints = 1000;
+    const int numPoints = 100000;
     const double minEnergy = 0.05;  // GeV
     const double maxEnergy = 5.0;  // GeV
     
