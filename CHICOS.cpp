@@ -116,11 +116,12 @@ private:
 
         exp_lambdas[0] = exp(complex<double>(0, -L_factor * lambdas[0]));
         exp_lambdas[1] = exp(complex<double>(0, -L_factor * lambdas[1]));
-        exp_lambdas[2] = 1.0 / (exp_lambdas[0] * exp_lambdas[1]);
+        exp_lambdas[2] = exp(complex<double>(0, -L_factor * lambdas[2]));
+        //exp_lambdas[2] = 1.0 / (exp_lambdas[0] * exp_lambdas[1]);
 
         for (int i = 0; i < 3; i++) {
-            int k = (i + 2) % 3;
             int j = (i + 1) % 3;
+            int k = (i + 2) % 3;
             // diff_exp = (lambda[idx1] - lambda[idx2]) * exp(-1j * L_factor * lambda[i])
             diff_exp = (lambdas[k] - lambdas[j]) * exp_lambdas[i];
             // Matrix combination: l_j*l_k * I + l_i * Hs + Hs2
@@ -147,16 +148,23 @@ private:
         // Shift the Hamiltonian: Hs = H - (TrH/3) I.
         Hs = H - (TrH / 3.0) * Matrix3cd::Identity();
         // Shift the squared Hamiltonian.
+        // TO CHECK!
         Hs2 = H2 - (2 * TrH * H / 3.0) + (TrH * TrH / 9.0) * Matrix3cd::Identity();
         // Trace of shifted Hamiltonian squared
         TrHs2 = std::real(Hs2(0,0) + Hs2(1,1) + Hs2(2,2));
         // Determinant of shifted Hamiltonian
-        DetHs = DetH + (TrH2 * TrH) / 6.0 - (5.0 / 54.0) * std::pow(TrH, 3);
+        // TO CHECK!
+        std::cout<<"Check DetHs"<<std::endl;
+        // DetHs = DetH + (TrH2 * TrH) / 6.0 - (5.0 / 54.0) * std::pow(TrH, 3);
+        // std::cout<<DetHs<<std::endl;
+        //DetHs = std::real(H.determinant());
+        //std::cout<<DetHs<<std::endl;
         // Disciminant of (shifted) Hamiltonian
         Disc2_Hs = std::real(0.5 * std::pow(TrHs2, 3) - 27 * DetHs * DetHs);
 
         // Eigenvalues of shifted Hamiltonian
         // _theta = arccos(sqrt(54 * DetHs^2 / TrHs2^3))
+        /*
         double ratio = std::sqrt(54.0 * DetHs * DetHs / std::pow(TrHs2, 3));
         double theta = std::acos(ratio);
         double sin_theta = std::sin(theta/3.0);
@@ -165,6 +173,13 @@ private:
         lambdas[0] = scale * cos_theta;
         lambdas[1] = 0.5 * scale * (-cos_theta - SQRT_3*sin_theta);
         lambdas[2] = - lambdas[0] - lambdas[1];
+        */
+        // TO CHECK!
+        //std::cout<<"Eigenvalues"<<std::endl;
+        //std::cout<<lambdas<<std::endl;
+        //lambdas = Hs.eigenvalues();
+        lambdas = Hs.eigenvalues().real();
+        std::cout<<Hs.eigenvalues()<<std::endl;
     }
 
     // Set various matrices needed for oscillation calculations.
@@ -238,7 +253,7 @@ int main() {
 
     const double minL = 10.0;  // km
     const double maxL = 10000.0;  // km
-    const int numPoints = 100000;
+    const int numPoints = 10;
     const double minEnergy = 0.05;  // GeV
     const double maxEnergy = 5.0;  // GeV
     
