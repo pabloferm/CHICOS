@@ -83,6 +83,7 @@ private:
     
     // Eigenvalues (lambdas)
     Vector3d lambdas;
+    Vector3d elambdas;
     Vector3cd exp_lambdas;
     
     // Pre-computed matrices (all 3x3 matrices)
@@ -148,38 +149,28 @@ private:
         // Shift the Hamiltonian: Hs = H - (TrH/3) I.
         Hs = H - (TrH / 3.0) * Matrix3cd::Identity();
         // Shift the squared Hamiltonian.
-        // TO CHECK!
         Hs2 = H2 - (2 * TrH * H / 3.0) + (TrH * TrH / 9.0) * Matrix3cd::Identity();
         // Trace of shifted Hamiltonian squared
         TrHs2 = std::real(Hs2(0,0) + Hs2(1,1) + Hs2(2,2));
         // Determinant of shifted Hamiltonian
-        // TO CHECK!
-        std::cout<<"Check DetHs"<<std::endl;
-        // DetHs = DetH + (TrH2 * TrH) / 6.0 - (5.0 / 54.0) * std::pow(TrH, 3);
-        // std::cout<<DetHs<<std::endl;
-        //DetHs = std::real(H.determinant());
-        //std::cout<<DetHs<<std::endl;
-        // Disciminant of (shifted) Hamiltonian
-        Disc2_Hs = std::real(0.5 * std::pow(TrHs2, 3) - 27 * DetHs * DetHs);
+        DetHs = DetH + (TrH2 * TrH) / 6.0 - (5.0 / 54.0) * std::pow(TrH, 3);
 
         // Eigenvalues of shifted Hamiltonian
-        // _theta = arccos(sqrt(54 * DetHs^2 / TrHs2^3))
-        /*
         double ratio = std::sqrt(54.0 * DetHs * DetHs / std::pow(TrHs2, 3));
         double theta = std::acos(ratio);
         double sin_theta = std::sin(theta/3.0);
         double cos_theta = std::sqrt(1-std::pow(sin_theta, 2));
         double scale = std::sqrt(2.0 * TrHs2 / 3.0);
-        lambdas[0] = scale * cos_theta;
-        lambdas[1] = 0.5 * scale * (-cos_theta - SQRT_3*sin_theta);
-        lambdas[2] = - lambdas[0] - lambdas[1];
-        */
-        // TO CHECK!
-        //std::cout<<"Eigenvalues"<<std::endl;
-        //std::cout<<lambdas<<std::endl;
-        //lambdas = Hs.eigenvalues();
-        lambdas = Hs.eigenvalues().real();
-        std::cout<<Hs.eigenvalues()<<std::endl;
+        lambdas(2) = scale * cos_theta;
+        lambdas(1) = - 0.5 * scale * (cos_theta + SQRT_3*sin_theta);
+        if (DetHs < 0.0){
+            lambdas(2) = - lambdas[2];
+            lambdas(1) = - lambdas[1];
+        }
+        lambdas(0) = - lambdas[2] - lambdas[1];
+        
+        // Discriminant        
+        Disc2_Hs = std::real(0.5 * std::pow(TrHs2, 3) - 27 * DetHs * DetHs);
     }
 
     // Set various matrices needed for oscillation calculations.
@@ -215,13 +206,13 @@ private:
     // Construct the PMNS matrix.
     void pmns_matrix() {
         double s12 = std::sin(theta_12);
-        double c12 = std::sqrt(1-std::pow(s12, 2));
+        double c12 = std::cos(theta_12);
         double s23 = std::sin(theta_23);
-        double c23 = std::sqrt(1-std::pow(s23, 2));
+        double c23 = std::cos(theta_23);
         double s13 = std::sin(theta_13);
-        double c13 = std::sqrt(1-std::pow(s13, 2));
+        double c13 = std::cos(theta_13);
         complex<double> e_idelta = std::exp(complex<double>(0, delta_cp));
-        complex<double> e_midelta = 1.0 / e_idelta;
+        complex<double> e_midelta = std::exp(complex<double>(0, -delta_cp));
         
         // Allocate U as a 3x3 complex matrix.
         U = Matrix3cd::Zero();
@@ -251,44 +242,44 @@ int main() {
     long long total_duration_ns = 0;
     size_t count = 0;
 
-    const double minL = 10.0;  // km
+    const double minL = 0.1;  // km
     const double maxL = 10000.0;  // km
-    const int numPoints = 10;
+    const int numPoints = 100;
     const double minEnergy = 0.05;  // GeV
-    const double maxEnergy = 5.0;  // GeV
+    const double maxEnergy = 50.0;  // GeV
     
     CHICOS chicos;
-    //std::cout << "E(GeV),L(km),P(e->e),P(mu->e),P(tau->e),P(e->mu),P(mu->mu),P(tau->mu),P(e->tau),P(mu->tau),P(tau->tau)\n";
+    std::cout << "E(GeV),L(km),P(e->e),P(mu->e),P(tau->e),P(e->mu),P(mu->mu),P(tau->mu),P(e->tau),P(mu->tau),P(tau->tau)\n";
     
     // Process energies on the fly without storing them
     for (int i = 0; i < numPoints; i++) {
-    //for (int j = 0; j < numPoints; j++) {
+    for (int j = 0; j < numPoints; j++) {
         double t = static_cast<double>(i) / (numPoints - 1);  // ranges from 0 to 1
-        //double s = static_cast<double>(j) / (numPoints - 1);  // ranges from 0 to 1
+        double s = static_cast<double>(j) / (numPoints - 1);  // ranges from 0 to 1
         double energy = minEnergy * std::pow(maxEnergy/minEnergy, t);  // logarithmic spacing
-        //double baseline = minL * std::pow(maxL/minL, s);  // logarithmic spacing
-        double baseline = 300.0;  // logarithmic spacing
+        double baseline = minL * std::pow(maxL/minL, s);  // logarithmic spacing
+        // double baseline = 300.0;  // logarithmic spacing
         auto start = high_resolution_clock::now();
         Matrix3cd prob = chicos.compute_oscillations(energy, baseline);
         auto end = high_resolution_clock::now();
         total_duration_ns += duration_cast<nanoseconds>(end - start).count();
         ++count;
-        
-                std::cout << std::scientific << std::setprecision(7)
+       
+                std::cout << std::scientific << std::setprecision(15)
                  << energy << ","
                  << baseline << ","
-                // << std::real(prob(0,0)) << ","
+                 << std::real(prob(0,0)) << ","
                  << std::real(prob(0,1)) << ","
-                // << std::real(prob(0,2)) << ","
-                // << std::real(prob(1,0)) << ","
+                 << std::real(prob(0,2)) << ","
+                 << std::real(prob(1,0)) << ","
                  << std::real(prob(1,1)) << ","
-                // << std::real(prob(1,2)) << ","
-                // << std::real(prob(2,0)) << ","
-                 << std::real(prob(2,1)) << "\n";
-                // << std::real(prob(2,2)) << "\n";
+                 << std::real(prob(1,2)) << ","
+                 << std::real(prob(2,0)) << ","
+                 << std::real(prob(2,1)) << ","
+                 << std::real(prob(2,2)) << "\n";
         
 
-    //}
+    }
     }
     double avg_ns = static_cast<double>(total_duration_ns) / count / 9.0;
     std::cout << "Total calls: " << count << "\n";

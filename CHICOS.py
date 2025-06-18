@@ -46,9 +46,7 @@ class CHICOS:
         self.shift_hamiltonian_squared(E)
         result = 0
         for i in range(3):
-            diff_exp = (self.lambdas[i - 1] - self.lambdas[i - 2]) * np.exp(
-                -1j * L * self.lambdas[i]
-            )
+            diff_exp = (self.lambdas[i - 1] - self.lambdas[i - 2]) * np.exp(-1j * L * self.lambdas[i])
             l_jk = self.lambdas[i - 1] * self.lambdas[i - 2]
             l_i = self.lambdas[i]
             result += diff_exp * (l_jk * np.identity(3) + l_i * self.Hs + self.Hs2)
