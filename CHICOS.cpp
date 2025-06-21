@@ -159,7 +159,7 @@ private:
         double ratio = std::sqrt(54.0 * DetHs * DetHs / std::pow(TrHs2, 3));
         double theta = std::acos(ratio);
         double sin_theta = std::sin(theta/3.0);
-        double cos_theta = std::sqrt(1-std::pow(sin_theta, 2));
+        double cos_theta = std::cos(sin_theta/3.0);
         double scale = std::sqrt(2.0 * TrHs2 / 3.0);
         lambdas(2) = scale * cos_theta;
         lambdas(1) = - 0.5 * scale * (cos_theta + SQRT_3*sin_theta);
